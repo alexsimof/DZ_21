@@ -119,41 +119,60 @@ const NEWYEAR = 20;
 const BLACKFRIDAY = 30;
 const SUMMERSALE = 15;
 const bigCash = 10;
+const minCash = 5;
+const bigQty = 5;
 
 let answeare = document.getElementById('answeare');
 let key = document.getElementById('key');
 
-key.addEventListener('click', function(){
+key.addEventListener('click', function() {
   let cost = document.getElementById('cost').value; // цена
   let code = document.getElementById('code').value; // код скидки
   let qty = document.getElementById('qty').value;  // кол-во товара
+  
 
-  switch (!code && !cost && !qty) {
-    case code == 'NEWYEAR':
-      let discount1 = (cost - (cost / 100 * NEWYEAR)) * qty;
-      if (discount1 < 1000) {
-        answeare.innerHTML = `Ваша цена - ${discount1} гривень`
-      } else {
-        let totalPrice1 = discount1 - (discount1 / 100 * bigCash)
-        answeare.innerHTML = `Ваша цена - ${totalPrice1} гривень`
-      }
-      break;
-      
-    case code == 'BLACKFRIDAY':
-      let discount2 = (cost - (cost / 100 * NEWYEAR)) * qty;
-      answeare.innerHTML = `Ваша цена - ${discount2} гривень`
-      break;
-    case code == 'SUMMERSALE':
-      let discount3 = (cost - (cost / 100 * NEWYEAR)) * qty;
-      answeare.innerHTML = `Ваша цена - ${discount3} гривень`
-      break;
+  if (code && cost && qty) {
     
+    if (code == "NEWYEAR" || code == "BLACKFRIDAY" || code == "SUMMERSALE") {
+      let discount = (cost - (cost / 100 * NEWYEAR || BLACKFRIDAY || SUMMERSALE)) * qty; //1
+
+      if (discount >= 1000) {
+        let newDisc = (discount - (discount / 100 * bigCash)) * qty;
+
+        if (qty >= 3) {
+          let superDisc = (newDisc - (newDisc / 100 * minCash)) * qty;
+          answeare.innerHTML = `Ваша цена - ${superDisc} гривень`
+          } else {
+            answeare.innerHTML = `Ваша цена - ${newDisc} гривень`
+          }
+
+        answeare.innerHTML = `Ваша цена - ${newDisc} гривень`
+      } else {
+        answeare.innerHTML = `Ваша цена - ${discount} гривень`
+      }
 
 
-    default:
-      answeare.innerHTML = 'Заполните все поля'
-      break;
+    } else {
+      let discount = (cost - (cost / 100 * minCash)) * qty;
 
+      if (discount >= 1000) {
+        let newDisc = (discount - (discount / 100 * bigCash)) * qty;
+
+        if (qty >= 3) {
+          let superDisc = (newDisc - (newDisc / 100 * minCash)) * qty;
+          answeare.innerHTML = `Ваша цена - ${superDisc} гривень`
+          } else {
+            answeare.innerHTML = `Ваша цена - ${newDisc} гривень`
+          }
+
+        answeare.innerHTML = `Ваша цена - ${newDisc} гривень`
+      } else {
+        answeare.innerHTML = `Ваша цена - ${discount} гривень`
+      }
+    }
+
+  } else {
+    answeare.innerHTML = 'Заполните все поля'
   }
 
 
